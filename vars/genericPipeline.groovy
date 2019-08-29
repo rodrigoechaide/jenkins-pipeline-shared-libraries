@@ -1,6 +1,8 @@
-def call(String projectType = "Library") {
+def call(String projectType) {
 
-if (projectType != "Library") {
+if (projectType == "Unit") {
+
+// Pipeline Definition for Units
 
 	pipeline {
 
@@ -83,7 +85,11 @@ if (projectType != "Library") {
 		}
 	}
 
-	} else {
+	}
+
+if (projectType == "Library")	{
+
+// Pipeline Definition for Libraries
 
 	pipeline {
 
