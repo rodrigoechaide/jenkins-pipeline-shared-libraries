@@ -16,19 +16,9 @@ def call(String projectType = "Library") {
 				sh "make test"
 				}
 			}
-			stage('Deploy') {
-				steps {
-				sh "make deploy"
-				}
-			}
-			stage('Only Development Stage') {
-				when {
-					branch 'development'
-				}
-				steps {
-					echo "Only Development Stage"
-				}
-			}
+
+		if (projectType != "Library") {
+
 			stage('Build-Image') {
 				when {
 					branch 'production'
@@ -45,6 +35,24 @@ def call(String projectType = "Library") {
 				sh "make push-image"
 				}
 			}
+
+			stage('Deploy') {
+				steps {
+				sh "make deploy"
+				}
+			}
+			
+			stage('Only Development Stage') {
+				when {
+					branch 'development'
+				}
+				steps {
+					echo "Only Development Stage"
+				}
+			}
+
+		}
+
 		}
 	}
 
