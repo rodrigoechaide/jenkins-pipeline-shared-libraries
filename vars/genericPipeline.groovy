@@ -1,6 +1,4 @@
-#!/usr/bin/env groovy
-
-// Declarative //
+def call(String projectType) {
 pipeline {
 
 	agent any
@@ -47,4 +45,6 @@ pipeline {
 			}
 		}
 	}
+}
+
 }
