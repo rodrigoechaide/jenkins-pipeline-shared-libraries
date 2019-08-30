@@ -1,8 +1,7 @@
 def call(Map pipelineParams) {
 
-echo pipelineParams
 	
-if (pipelineParams.projectType == "Unit") {
+//if (pipelineParams.projectType == "Unit") {
 
 // Pipeline Definition for Units
 
@@ -98,7 +97,7 @@ if (pipelineParams.projectType == "Unit") {
 
 	}
 
-if (pipelineParams.projectType == "Library")	{
+/*if (pipelineParams.projectType == "Library")	{
 
 // Pipeline Definition for Libraries
 
@@ -140,7 +139,7 @@ if (pipelineParams.projectType == "Library")	{
 
 			}
 
-		}
+		}*/
 	}
 
 }
