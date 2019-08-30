@@ -1,12 +1,16 @@
-def call(String projectType) {
+def call(Map pipelineParams) {
 
-if (projectType == "Unit") {
+if (pipelineParams.projectType == "Unit") {
 
 // Pipeline Definition for Units
 
 	pipeline {
 
-		agent any
+		agent {
+
+        docker { image pipelineParams.DockerImage }
+    	
+    	}
 
 		stages {
 
@@ -14,7 +18,7 @@ if (projectType == "Unit") {
 				
 				steps {
 
-				sh "make build"
+				//sh "make build"
 				echo "Running ${env.BUILD_ID} on ${env.JENKINS_URL}"
 				
 				}
@@ -24,7 +28,8 @@ if (projectType == "Unit") {
 				
 				steps {
 				
-				sh "make test"
+				//sh "make test"
+				echo "test"
 				
 				}
 			}
@@ -39,7 +44,8 @@ if (projectType == "Unit") {
 				
 				steps {
 				
-				sh "make build-image"
+				//sh "make build-image"
+				echo "build-image"
 				
 				}
 			}
@@ -53,7 +59,8 @@ if (projectType == "Unit") {
 				
 				steps {
 				
-				sh "make push-image"
+				//sh "make push-image"
+				echo "production"
 				
 				}
 			}
@@ -62,8 +69,10 @@ if (projectType == "Unit") {
 				
 				steps {
 				
-				sh "make deploy"
+				//sh "make deploy"
 				
+				echo "Deploy"
+
 				}
 			}
 			
@@ -101,7 +110,7 @@ if (projectType == "Library")	{
 				
 				steps {
 				
-				sh "make build"
+				//sh "make build"
 				echo "Running ${env.BUILD_ID} on ${env.JENKINS_URL}"
 				
 				}
@@ -111,7 +120,7 @@ if (projectType == "Library")	{
 				
 				steps {
 				
-				sh "make test"
+				//sh "make test"
 				
 				}
 			}
@@ -120,7 +129,7 @@ if (projectType == "Library")	{
 
 				steps {
 
-				sh "make upload"
+				//sh "make upload"
 				
 				}
 			}
