@@ -96,7 +96,7 @@ if (pipelineParams.projectType == "Unit") {
 
 	}
 
-if (projectType == "Library")	{
+if (pipelineParams.projectType == "Library")	{
 
 // Pipeline Definition for Libraries
 
