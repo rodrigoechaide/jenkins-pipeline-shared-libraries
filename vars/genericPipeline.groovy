@@ -95,7 +95,7 @@ def call(Map pipelineParams) {
 		}
 	}
 
-	}
+	//}
 
 /*if (pipelineParams.projectType == "Library")	{
 
