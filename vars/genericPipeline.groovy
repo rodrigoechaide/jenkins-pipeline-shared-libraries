@@ -54,7 +54,7 @@ def call(Map pipelineParams) {
 
 			stage('Push-Image') {
 				when {
-					expression { pipelineParams.dockerImage == 'Unit' }
+					expression { pipelineParams.projectType == 'Unit' }
 					branch 'production'
 				
 				}
@@ -62,7 +62,7 @@ def call(Map pipelineParams) {
 				steps {
 				
 				//sh "make push-image"
-				echo "production"
+				echo "production push-image"
 				
 				}
 			}
