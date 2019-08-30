@@ -1,5 +1,7 @@
 def call(Map pipelineParams) {
 
+echo pipelineParams
+	
 if (pipelineParams.projectType == "Unit") {
 
 // Pipeline Definition for Units
