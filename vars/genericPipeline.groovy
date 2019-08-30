@@ -8,7 +8,7 @@ if (pipelineParams.projectType == "Unit") {
 
 		agent {
 
-        docker { image pipelineParams.DockerImage }
+        docker { image pipelineParams.dockerImage }
     	
     	}
 
