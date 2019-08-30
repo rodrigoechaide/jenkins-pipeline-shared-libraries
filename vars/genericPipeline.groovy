@@ -54,9 +54,10 @@ def call(Map pipelineParams) {
 
 			stage('Push-Image') {
 				when {
-					expression { pipelineParams.projectType == 'Unit' }
-					branch 'production'
-				
+					anyOf {
+						expression { pipelineParams.projectType == 'Unit' }
+						branch 'production'
+					}
 				}
 				
 				steps {
