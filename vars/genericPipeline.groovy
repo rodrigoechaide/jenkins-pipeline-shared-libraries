@@ -121,6 +121,7 @@ if (pipelineParams.projectType == "Library")	{
 				steps {
 				
 				//sh "make test"
+				echo "Test"	
 				
 				}
 			}
@@ -130,6 +131,7 @@ if (pipelineParams.projectType == "Library")	{
 				steps {
 
 				//sh "make upload"
+				echo "Upload"	
 				
 				}
 			}
