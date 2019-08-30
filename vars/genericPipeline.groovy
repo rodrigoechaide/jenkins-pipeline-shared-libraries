@@ -7,11 +7,12 @@ def call(Map pipelineParams) {
 
 	pipeline {
 
-		agent {
+		agent any
+/*		agent {
 
         docker { image pipelineParams.dockerImage }
     	
-    	}
+    	}*/
 
 		stages {
 
@@ -53,7 +54,7 @@ def call(Map pipelineParams) {
 
 			stage('Push-Image') {
 				when {
-				
+					expression { pipelineParams.dockerImage == 'Unit' }
 					branch 'production'
 				
 				}
