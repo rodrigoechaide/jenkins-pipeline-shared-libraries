@@ -39,15 +39,13 @@ def call(Map pipelineParams) {
 			stage('Build-Image') {
 				
 				when {
-				
-					branch 'production'
-				
+					expression { pipelineParams.projectType == 'Library' }
 				}
 				
 				steps {
 				
-				//sh "make build-image"
-				echo "build-image"
+				//sh "make push-image"
+				echo "The Project Type is: ${pipelineParams.projectType}"
 				
 				}
 			}
