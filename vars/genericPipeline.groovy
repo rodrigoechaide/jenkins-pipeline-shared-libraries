@@ -54,16 +54,13 @@ def call(Map pipelineParams) {
 
 			stage('Push-Image') {
 				when {
-					anyOf {
-						expression { pipelineParams.projectType == 'Unit' }
-						branch 'production'
-					}
+					expression { pipelineParams.projectType == 'Unit' }
 				}
 				
 				steps {
 				
 				//sh "make push-image"
-				echo "production push-image"
+				echo "The Project Type is: ${pipelineParams.projectType}"
 				
 				}
 			}
