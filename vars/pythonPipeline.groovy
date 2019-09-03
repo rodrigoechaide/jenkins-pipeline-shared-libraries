@@ -22,7 +22,6 @@ def call(Map pipelineParams) {
 			}
 
 			stage('Build') {
-				
 				steps {
 					sh 'pip install --upgrade setuptools==41.2.0' //--> Already done in docker image
 					sh 'pip install --upgrade pip' //--> Already done in docker image
@@ -31,7 +30,6 @@ def call(Map pipelineParams) {
 			}
 
 			stage('Unit-Tests') {
-				
 				steps {
 					sh 'make -C . -f inc/release-me-python/python-release-with-params.mk test'
 				}
