@@ -92,52 +92,5 @@ def call(Map pipelineParams) {
 		}
 	}
 
-	//}
-
-/*if (pipelineParams.projectType == "Library")	{
-
-// Pipeline Definition for Libraries
-
-	pipeline {
-
-		agent any
-
-		stages {
-
-			stage('Build') {
-				
-				steps {
-				
-				//sh "make build"
-				echo "Running ${env.BUILD_ID} on ${env.JENKINS_URL}"
-				
-				}
-			}
-
-			stage('Test') {
-				
-				steps {
-				
-				//sh "make test"
-				echo "Test"	
-				
-				}
-			}
-
-			stage('Upload') {
-
-				steps {
-
-				//sh "make upload"
-				echo "Upload"	
-				
-				}
-			}
-
-			}
-
-		}*/
-	//}
-
 }
 
