@@ -1,15 +1,12 @@
 def call(Map pipelineParams) {
 
-	
 // Pipeline Definition for Python Units and Libraries
 
 	pipeline {
 
 		agent {
-
-        docker { image pipelineParams.dockerImage }
-    	
-    	}
+			docker { image pipelineParams.dockerImage }
+		}
 
 		stages {
 
