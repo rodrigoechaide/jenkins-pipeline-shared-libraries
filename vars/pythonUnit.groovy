@@ -13,7 +13,7 @@ def call(Map pipelineParams) {
 
 		stages {
 
-			stage('Aux SCM') {
+			stage('SCM') {
 		      	steps {
 		        	dir('inc') {
 		          		dir('release-me-python') {
@@ -26,8 +26,8 @@ def call(Map pipelineParams) {
 
 			stage('Build') {
 				steps {
-					sh 'pip install --upgrade setuptools==41.2.0' //--> Already done in docker image
-					sh 'pip install --upgrade pip' //--> Already done in docker image
+					sh 'pip install --upgrade pip' //--> Already done in docker image. Remove this step when pipeline running inside release-me-python docker image
+					sh 'pip install --upgrade setuptools==41.2.0' //--> Already done in docker image. Remove this step when pipeline running inside release-me-python docker image
 					sh 'make -C . -f inc/release-me-python/python-release-with-params.mk clean dist'
 				}
 			}
@@ -40,14 +40,23 @@ def call(Map pipelineParams) {
 
 			stage('Lint') {
 				steps {
-					sh 'pip install astroid==2.2.5 pylint==2.3.1 isort==4.2.15 flake8==3.7.8'
-					sh 'make -C . -f inc/release-me-python/python-release-with-params.mk static-analysis MAIN_DIR=src TESTS_DIR=tests'
+					sh 'pip install astroid==2.2.5 pylint==2.3.1 isort==4.2.15 flake8==3.7.8' //--> Already done in docker image. Remove this step when pipeline running inside release-me-python docker image
+					sh "make -C . -f inc/release-me-python/python-release-with-params.mk static-analysis MAIN_DIR=pipelineParams.srcDir TESTS_DIR=pipelineParams.testsDir"
 				}
-			}	
+			}
 
 			stage('Sonar-Analisys') {
 				steps {
 					echo 'Executing code analisys in Sonar'
+				}
+			}
+
+			stage('Snapshot-Release') {
+				when {
+					expression { pipelineParams.release == 'False' }
+				}
+				steps {			
+					sh 'make -C . -f inc/release-me-python/python-release-with-params.mk upload-to-nexus REPO=snapshots'
 				}
 			}
 
@@ -61,52 +70,45 @@ def call(Map pipelineParams) {
 					sh 'pip install bumpversion'
 					sh 'make -C . -f inc/release-me-python/python-release-with-params.mk pre-release upload-to-nexus post-release RELEASE_VERSION=$RELEASE_VERSION NEXT_DEVELOPMENT_VERSION=$NEXT_DEV_VERSION REPO=releases'
 				}
-			}	
+			}
 
-			stage('Build-Image') {				
-				when {
-					expression { pipelineParams.projectType == 'Unit' }
+			stage('Lint-Dockerfile') {		
+				steps {
+					echo "Linting Dockerfile"
 				}
+			}
+
+			stage('Build-Image') {		
 				steps {
 					echo "Building Docker Image"
 				}
 			}
 
 			stage('Push-Image') {
-				when {
-					expression { pipelineParams.projectType == 'Unit' }
-				}
 				steps {
-					echo "Pushing Docker Image"
+					echo "Pushing Docker Image to Docker Registry"
 				}
 			}
 
 
-			stage('System Tests') {
-				when {
-					expression { pipelineParams.projectType == 'Unit' }
-				}
+			stage('System-Tests') {
 				steps {
-					echo "Executing System Tests"	
+					echo "Executing Smoke System Tests. Most important system tests"	
 				}
 			}
 
-
-			stage('Regresion Tests') {
-				when {
-					expression { pipelineParams.projectType == 'Unit' }
-				}
+			stage('Regression-Tests') {
+				//when {
+				//	expression { regresionTests == 'True' }
+				//}
 				steps {
-					echo "Executing Regresion Tests"
+					echo "Executing Full Regresion Tests. Triggers this stage with a cron so it only runs at nights"
 				}
 			}
 
 			stage('Deploy') {
-				when {
-					expression { pipelineParams.projectType == 'Unit' }
-				}
 				steps {
-					echo "Deploying Application"
+					echo "Deploying Application. Invoke here the deploy repository"
 				}
 			}
 		}
