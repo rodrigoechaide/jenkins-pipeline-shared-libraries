@@ -51,7 +51,7 @@ def call(Map pipelineParams) {
 				}
 			}
 
-			stage('Snapshot-Release') {
+			stage('Upload-Snapshot') {
 				steps {
 					echo 'Releasing snapshot version of the library'			
 					//sh 'make -C . -f inc/release-me-python/python-release-with-params.mk upload-to-nexus REPO=snapshots'

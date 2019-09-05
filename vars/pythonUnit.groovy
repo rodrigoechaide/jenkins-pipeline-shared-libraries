@@ -51,7 +51,7 @@ def call(Map pipelineParams) {
 				}
 			}
 
-			stage('Snapshot-Release') {
+			stage('Upload-Snapshot') {
 				when {
 					expression { pipelineParams.release == 'False' }
 				}
