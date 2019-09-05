@@ -52,17 +52,15 @@ def call(Map pipelineParams) {
 			}
 
 			stage('Snapshot-Release') {
-				when {
-					expression { pipelineParams.release == 'False' }
-				}
-				steps {			
-					sh 'make -C . -f inc/release-me-python/python-release-with-params.mk upload-to-nexus REPO=snapshots'
+				steps {
+					echo 'Releasing snapshot version of the library'			
+					//sh 'make -C . -f inc/release-me-python/python-release-with-params.mk upload-to-nexus REPO=snapshots'
 				}
 			}
 
 			stage('Release') {
 				when {
-					expression { pipelineParams.release == 'True' }
+					expression { Release == 'True' }
 				}
 				steps {			
 					//sh 'export MAKEFILE=inc/release-me-python/python-release-with-params.mk'
