@@ -41,7 +41,7 @@ def call(Map pipelineParams) {
 			stage('Project-Lint') {
 				steps {
 					sh 'pip install astroid==2.2.5 pylint==2.3.1 isort==4.2.15 flake8==3.7.8'
-					sh "make -C . -f inc/release-me-python/python-release-with-params.mk static-analysis MAIN_DIR=pipelineParams.srcDir TESTS_DIR=pipelineParams.testDir"
+					sh "make -C . -f inc/release-me-python/python-release-with-params.mk static-analysis MAIN_DIR=${pipelineParams.srcDir} TESTS_DIR=${pipelineParams.testDir}"
 				}
 			}
 
