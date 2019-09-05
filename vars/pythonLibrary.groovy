@@ -60,7 +60,7 @@ def call(Map pipelineParams) {
 
 			stage('Release') {
 				when {
-					expression { releaseParam == 'True' }
+					expression { pipelineParams.release == 'True' }
 				}
 				steps {			
 					//sh 'export MAKEFILE=inc/release-me-python/python-release-with-params.mk'
