@@ -19,13 +19,13 @@ def call(Map pipelineParams) {
 					sh 'pip install --upgrade pip' //--> Already done in docker image
 					sh 'pip install --upgrade setuptools==41.2.0' //--> Already done in docker image
 					*/
-					sh 'make -C . -f inc/release-me-python/python-release-with-params.mk clean dist'
+					sh 'make -C . -f /inc/release-me-python/python-release-with-params.mk clean dist'
 				}
 			}
 
 			stage('Unit-Tests') {
 				steps {
-					sh 'make -C . -f inc/release-me-python/python-release-with-params.mk test'
+					sh 'make -C . -f /inc/release-me-python/python-release-with-params.mk test'
 				}
 			}
 
@@ -34,7 +34,7 @@ def call(Map pipelineParams) {
 					/*
 					sh 'pip install astroid==2.2.5 pylint==2.3.1 isort==4.2.15 flake8==3.7.8'
 					*/
-					sh "make -C . -f inc/release-me-python/python-release-with-params.mk static-analysis MAIN_DIR=${pipelineParams.srcDir} TESTS_DIR=${pipelineParams.testDir}"
+					sh "make -C . -f /inc/release-me-python/python-release-with-params.mk static-analysis MAIN_DIR=${pipelineParams.srcDir} TESTS_DIR=${pipelineParams.testDir}"
 				}
 			}
 
@@ -47,7 +47,7 @@ def call(Map pipelineParams) {
 			stage('Upload-Snapshot') {
 				steps {
 					echo 'Releasing snapshot version of the library'			
-					sh 'make -C . -f inc/release-me-python/python-release-with-params.mk upload-to-nexus REPO=snapshots'
+					sh 'make -C . -f /inc/release-me-python/python-release-with-params.mk upload-to-nexus REPO=snapshots'
 				}
 			}
 
@@ -59,7 +59,7 @@ def call(Map pipelineParams) {
 					// sh 'export MAKEFILE=inc/release-me-python/python-release-with-params.mk'
 					// pip install --upgrade setuptools==41.2.0;
 					// sh 'pip install bumpversion'
-					sh 'make -C . -f inc/release-me-python/python-release-with-params.mk pre-release upload-to-nexus post-release RELEASE_VERSION=$RELEASE_VERSION NEXT_DEVELOPMENT_VERSION=$NEXT_DEV_VERSION REPO=releases'
+					sh 'make -C . -f /inc/release-me-python/python-release-with-params.mk pre-release upload-to-nexus post-release RELEASE_VERSION=$RELEASE_VERSION NEXT_DEVELOPMENT_VERSION=$NEXT_DEV_VERSION REPO=releases'
 				}
 			}
 		}
