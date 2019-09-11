@@ -45,9 +45,13 @@ def call(Map pipelineParams) {
 			}
 
 			stage('Upload-Snapshot') {
+				environment {
+					ARTIFACT_REGISTRY_URL = pipelineParams.artifactRegistrySnapshots
+					ARTIFACT_REGISTRY_CREDENTIALS = credentials('73529b15-34f4-4912-9ef6-0829547c9586')
+				}
 				steps {
 					echo 'Releasing snapshot version of the library'			
-					sh 'make -C . -f /inc/release-me-python/python-release-with-params.mk upload-to-nexus REPO=snapshots'
+					sh 'make -C . -f /inc/release-me-python/python-release-with-params.mk upload-to-nexus'
 				}
 			}
 
@@ -55,11 +59,15 @@ def call(Map pipelineParams) {
 				when {
 					expression { pipelineParams.release == 'True' }
 				}
+				environment {
+					ARTIFACT_REGISTRY_URL = pipelineParams.artifactRegistryReleases
+					ARTIFACT_REGISTRY_CREDENTIALS = credentials('73529b15-34f4-4912-9ef6-0829547c9586')
+				}
 				steps {			
 					// sh 'export MAKEFILE=inc/release-me-python/python-release-with-params.mk'
 					// pip install --upgrade setuptools==41.2.0;
 					// sh 'pip install bumpversion'
-					sh 'make -C . -f /inc/release-me-python/python-release-with-params.mk pre-release upload-to-nexus post-release RELEASE_VERSION=$RELEASE_VERSION NEXT_DEVELOPMENT_VERSION=$NEXT_DEV_VERSION REPO=releases'
+					sh 'make -C . -f /inc/release-me-python/python-release-with-params.mk pre-release upload-to-nexus post-release RELEASE_VERSION=$RELEASE_VERSION NEXT_DEVELOPMENT_VERSION=$NEXT_DEV_VERSION'
 				}
 			}
 		}
