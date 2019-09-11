@@ -46,7 +46,7 @@ def call(Map pipelineParams) {
 
 			stage('Upload-Snapshot') {
 				environment {
-					ARTIFACT_REGISTRY_URL = pipelineParams.artifactRegistrySnapshots
+					ARTIFACT_REGISTRY_URL = "${pipelineParams.artifactRegistrySnapshots}"
 					ARTIFACT_REGISTRY_CREDENTIALS = credentials('73529b15-34f4-4912-9ef6-0829547c9586')
 				}
 				steps {
@@ -60,7 +60,7 @@ def call(Map pipelineParams) {
 					expression { pipelineParams.release == 'True' }
 				}
 				environment {
-					ARTIFACT_REGISTRY_URL = pipelineParams.artifactRegistryReleases
+					ARTIFACT_REGISTRY_URL = "${pipelineParams.artifactRegistryReleases}"
 					ARTIFACT_REGISTRY_CREDENTIALS = credentials('73529b15-34f4-4912-9ef6-0829547c9586')
 				}
 				steps {			
