@@ -13,35 +13,28 @@ def call(Map pipelineParams) {
 
 		stages {
 
-			stage('SCM') {
-		      	steps {
-		        	dir('inc') {
-		          		dir('release-me-python') {
-		            		git(url: 'git@gitlab.ascentio.com.ar:asc-comp/release-me-python.git', branch: 'master')
-		          		}
-		        	}
-		        	echo 'release-me-python repository succesfully checked out!'
-			  	}
-			}
-
 			stage('Build') {
 				steps {
+					/*
 					sh 'pip install --upgrade pip' //--> Already done in docker image
 					sh 'pip install --upgrade setuptools==41.2.0' //--> Already done in docker image
-					sh 'make -C . -f inc/release-me-python/python-release-with-params.mk clean dist'
+					*/
+					sh 'make -C . -f /inc/release-me-python/python-release-with-params.mk clean dist'
 				}
 			}
 
 			stage('Unit-Tests') {
 				steps {
-					sh 'make -C . -f inc/release-me-python/python-release-with-params.mk test'
+					sh 'make -C . -f /inc/release-me-python/python-release-with-params.mk test'
 				}
 			}
 
 			stage('Project-Lint') {
 				steps {
+					/*
 					sh 'pip install astroid==2.2.5 pylint==2.3.1 isort==4.2.15 flake8==3.7.8'
-					sh "make -C . -f inc/release-me-python/python-release-with-params.mk static-analysis MAIN_DIR=${pipelineParams.srcDir} TESTS_DIR=${pipelineParams.testDir}"
+					*/
+					sh "make -C . -f /inc/release-me-python/python-release-with-params.mk static-analysis MAIN_DIR=${pipelineParams.srcDir} TESTS_DIR=${pipelineParams.testDir}"
 				}
 			}
 
@@ -52,9 +45,13 @@ def call(Map pipelineParams) {
 			}
 
 			stage('Upload-Snapshot') {
+				environment {
+					ARTIFACT_REGISTRY_URL = "${pipelineParams.artifactRegistrySnapshots}"
+					ARTIFACT_REGISTRY_CREDENTIALS = credentials('73529b15-34f4-4912-9ef6-0829547c9586')
+				}
 				steps {
 					echo 'Releasing snapshot version of the library'			
-					//sh 'make -C . -f inc/release-me-python/python-release-with-params.mk upload-to-nexus REPO=snapshots'
+					sh 'make -C . -f /inc/release-me-python/python-release-with-params.mk upload-to-nexus'
 				}
 			}
 
@@ -62,11 +59,15 @@ def call(Map pipelineParams) {
 				when {
 					expression { pipelineParams.release == 'True' }
 				}
+				environment {
+					ARTIFACT_REGISTRY_URL = "${pipelineParams.artifactRegistryReleases}"
+					ARTIFACT_REGISTRY_CREDENTIALS = credentials('73529b15-34f4-4912-9ef6-0829547c9586')
+				}
 				steps {			
-					//sh 'export MAKEFILE=inc/release-me-python/python-release-with-params.mk'
-					//pip install --upgrade setuptools==41.2.0;
-					sh 'pip install bumpversion'
-					sh 'make -C . -f inc/release-me-python/python-release-with-params.mk pre-release upload-to-nexus post-release RELEASE_VERSION=$RELEASE_VERSION NEXT_DEVELOPMENT_VERSION=$NEXT_DEV_VERSION REPO=releases'
+					// sh 'export MAKEFILE=inc/release-me-python/python-release-with-params.mk'
+					// pip install --upgrade setuptools==41.2.0;
+					// sh 'pip install bumpversion'
+					sh 'make -C . -f /inc/release-me-python/python-release-with-params.mk pre-release upload-to-nexus post-release RELEASE_VERSION=$RELEASE_VERSION NEXT_DEVELOPMENT_VERSION=$NEXT_DEV_VERSION'
 				}
 			}
 		}
