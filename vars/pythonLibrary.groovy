@@ -72,10 +72,10 @@ def call(Map pipelineParams) {
 			}
 		}
 
-    	post {
-			always { 
-				cleanWs()
-			}
-		}
+    	//post {
+		//	always { 
+		//		cleanWs()
+		//	}
+		//}
 	}
 }
