@@ -5,20 +5,22 @@ def call(Map pipelineParams) {
 	pipeline {
 
 		agent {
-			docker { 
+			docker {
 			    image pipelineParams.dockerImage
 			    args '-u root:root'
 			}
+		}
+
+		parameters {
+	    	booleanParam(name: 'RELEASE', defaultValue: false, description: 'Are you doing a Release?')
+	    	string(name: 'RELEASE_VERSION', defaultValue: '', description: 'Version to be released (e.g: 1.1.0, 1.1.0rc1)')
+	    	string(name: 'NEXT_DEV_VERSION', defaultValue: '', description: 'Next development version (e.g: 1.2.0.dev1) according to <a href="https://www.python.org/dev/peps/pep-0440/">PEP-440</a>')
 		}
 
 		stages {
 
 			stage('Build') {
 				steps {
-					/*
-					sh 'pip install --upgrade pip' //--> Already done in docker image
-					sh 'pip install --upgrade setuptools==41.2.0' //--> Already done in docker image
-					*/
 					sh 'make -C . -f /inc/release-me-python/python-release-with-params.mk clean dist'
 				}
 			}
@@ -31,9 +33,6 @@ def call(Map pipelineParams) {
 
 			stage('Project-Lint') {
 				steps {
-					/*
-					sh 'pip install astroid==2.2.5 pylint==2.3.1 isort==4.2.15 flake8==3.7.8'
-					*/
 					sh "make -C . -f /inc/release-me-python/python-release-with-params.mk static-analysis MAIN_DIR=${pipelineParams.srcDir} TESTS_DIR=${pipelineParams.testDir}"
 				}
 			}
@@ -44,7 +43,20 @@ def call(Map pipelineParams) {
 				}
 			}
 
+			stage('Regression-Tests') {
+				when {
+					triggeredBy "TimerTrigger"
+				}
+				steps {
+					echo "Regression Tests triggered by Cron Job"
+				}	
+			}
+
 			stage('Upload-Snapshot') {
+				when {
+					environment name: 'gitlabActionType', value: 'PUSH'
+					expression { params.RELEASE == false }
+					}
 				environment {
 					ARTIFACT_REGISTRY_URL = "${pipelineParams.artifactRegistrySnapshots}"
 					ARTIFACT_REGISTRY_CREDENTIALS = credentials('73529b15-34f4-4912-9ef6-0829547c9586')
@@ -57,19 +69,25 @@ def call(Map pipelineParams) {
 
 			stage('Release') {
 				when {
-					expression { pipelineParams.release == 'True' }
-				}
+					expression { params.RELEASE == true }
+					}
 				environment {
 					ARTIFACT_REGISTRY_URL = "${pipelineParams.artifactRegistryReleases}"
 					ARTIFACT_REGISTRY_CREDENTIALS = credentials('73529b15-34f4-4912-9ef6-0829547c9586')
 				}
-				steps {			
-					// sh 'export MAKEFILE=inc/release-me-python/python-release-with-params.mk'
-					// pip install --upgrade setuptools==41.2.0;
-					// sh 'pip install bumpversion'
-					sh 'make -C . -f /inc/release-me-python/python-release-with-params.mk pre-release upload-to-nexus post-release RELEASE_VERSION=$RELEASE_VERSION NEXT_DEVELOPMENT_VERSION=$NEXT_DEV_VERSION'
+				steps {
+					echo 'Releasing new version of the library'
+					sh "make -C . -f /inc/release-me-python/python-release-with-params.mk pre-release upload-to-nexus post-release RELEASE_VERSION=${params.RELEASE_VERSION} NEXT_DEVELOPMENT_VERSION=${params.NEXT_DEV_VERSION}"
 				}
 			}
 		}
+
+/*    	post {
+
+			always {
+			 
+				cleanWs()
+			}
+		}*/
 	}
 }
