@@ -43,6 +43,15 @@ def call(Map pipelineParams) {
 				}
 			}
 
+			stage('Regression-Tests') {
+				when {
+					triggeredBy "TimerTrigger"
+				}
+				steps {
+					echo "Regression Tests triggered by Cron Job"
+				}	
+			}
+
 			stage('Upload-Snapshot') {
 				when {
 					environment name: 'gitlabActionType', value: 'PUSH'
@@ -73,12 +82,12 @@ def call(Map pipelineParams) {
 			}
 		}
 
-    	post {
+/*    	post {
 
 			always {
 			 
 				cleanWs()
 			}
-		}
+		}*/
 	}
 }
