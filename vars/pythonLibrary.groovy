@@ -19,15 +19,18 @@ def call(Map pipelineParams) {
 
 		stages {
 
-			stage('Build') {
+			stage('Setting Build Name') {
 				steps {
-					sh 'make -C . -f /inc/release-me-python/python-release-with-params.mk clean dist'
+					script {
+						currentBuild.displayName = "#${env.BUILD_NUMBER} at ${env.GIT_COMMIT.substring(0,6)}"
+						//currentBuild.description = "Test Description"
+					}
 				}
 			}
 
 			stage('Unit-Tests') {
 				steps {
-					sh 'make -C . -f /inc/release-me-python/python-release-with-params.mk test'
+					sh 'make -C . -f /inc/release-me-python/python-release-with-params.mk clean dist test'
 				}
 			}
 
@@ -74,10 +77,13 @@ def call(Map pipelineParams) {
 				environment {
 					ARTIFACT_REGISTRY_URL = "${pipelineParams.artifactRegistryReleases}"
 					ARTIFACT_REGISTRY_CREDENTIALS = credentials('73529b15-34f4-4912-9ef6-0829547c9586')
+					SSH_KEY_CREDENTIALS = credentials('651c7382-f7d9-41a5-93ab-a6e197ee1d77')
+					GIT_SSH_COMMAND="ssh -i ${SSH_KEY_CREDENTIALS} -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no"
 				}
 				steps {
 					echo 'Releasing new version of the library'
 					sh "make -C . -f /inc/release-me-python/python-release-with-params.mk pre-release upload-to-nexus post-release RELEASE_VERSION=${params.RELEASE_VERSION} NEXT_DEVELOPMENT_VERSION=${params.NEXT_DEV_VERSION}"
+					}
 				}
 			}
 		}
