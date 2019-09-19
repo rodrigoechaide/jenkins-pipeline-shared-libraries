@@ -2,22 +2,48 @@ def call(Map pipelineParams) {
 
 	pipeline {
 
-		agent any
+		agent {
+			label 'docker'
+		}
+
+		parameters {
+			booleanParam(name: 'RELEASE', defaultValue: false, description: 'Are you doing a Release?')
+			string(name: 'RELEASE_VERSION', defaultValue: '', description: 'Version to be released (e.g: 1.1.0, 1.1.0rc1)')
+			string(name: 'NEXT_DEV_VERSION', defaultValue: '', description: 'Next development version (e.g: 1.2.0.dev1) according to <a href="https://www.python.org/dev/peps/pep-0440/">PEP-440</a>')
+		}
 
 		stages {
+
+			stage('Setting Build Name') {
+				steps {
+					script {
+						currentBuild.displayName = "#${env.BUILD_NUMBER} at ${env.GIT_COMMIT.substring(0,6)}"
+						//currentBuild.description = "Test Description"
+					}
+				}
+			}
+
 			stage('Lint-Image') {
 				steps {
-				sh "make lint-image"
+					sh "make lint-image"
 				}
 			}
+
 			stage('Build-Image') {
 				steps {
-				sh "make build-image"
+					sh "make build-image"
 				}
 			}
-			stage('Push-Image') {
+
+			stage('Push-Image-Snapshot') {
 				steps {
-				sh "make push-image"
+					sh "make push-image INTERNAL_REGISTRY_URL=${pipelineParams.devRegistry}"
+				}
+			}
+
+			stage('Push-Image-Release') {
+				steps {
+					sh "make push-image IMAGE_VERSION=${params.RELEASE_VERSION} INTERNAL_REGISTRY_URL=${pipelineParams.cmsRegistry}"
 				}
 			}
 		}
