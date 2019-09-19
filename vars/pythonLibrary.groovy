@@ -5,9 +5,8 @@ def call(Map pipelineParams) {
 	pipeline {
 
 		agent {
-			docker {
-			    image pipelineParams.dockerImage
-			    args '-u root:root'
+			dockerfile {
+				args '-u root:root'
 			}
 		}
 
