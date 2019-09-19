@@ -1,6 +1,6 @@
 def call(Map pipelineParams) {
 
-// Pipeline Definition for Python Units and Libraries
+// Pipeline Definition for Python Libraries
 
 	pipeline {
 
