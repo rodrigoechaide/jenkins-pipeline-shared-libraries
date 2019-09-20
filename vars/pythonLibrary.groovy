@@ -51,7 +51,7 @@ def call(Map pipelineParams) {
 				}
 				steps {
 					echo "Regression Tests triggered by Cron Job"
-				}	
+				}
 			}
 
 			stage('Upload-Snapshot') {
