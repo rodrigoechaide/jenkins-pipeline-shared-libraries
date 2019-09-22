@@ -41,9 +41,9 @@ def call(Map pipelineParams) {
 					expression { params.RELEASE == false }
 					}
 				steps {
-					echo 'Logging to DEV Docker Registry'
+					echo 'Logging in to DEV Docker Registry'
 					script {
-						docker.withRegistry('${pipelineParams.dockerRegistrySnapshots}', '73529b15-34f4-4912-9ef6-0829547c9586') {
+						docker.withRegistry("${pipelineParams.dockerRegistrySnapshots}", "73529b15-34f4-4912-9ef6-0829547c9586") {
 							echo "Pushing Image to DEV Registry"
 							sh "make push-image IMAGE_VERSION=${params.NEXT_DEV_VERSION} INTERNAL_REGISTRY_URL=${pipelineParams.dockerRegistrySnapshots}"
 							sh "make push-image IMAGE_VERSION=latest INTERNAL_REGISTRY_URL=${pipelineParams.dockerRegistrySnapshots}"
@@ -69,9 +69,9 @@ def call(Map pipelineParams) {
 					sh "git tag -a ${params.RELEASE_VERSION} -m \"Created by Jenkins Sabiamar\""
 					sh "git push origin master"
 					sh "git push origin ${params.RELEASE_VERSION}"
-					echo 'Logging to CMS Docker Registry'
+					echo 'Logging in to CMS Docker Registry'
 					script {
-						docker.withRegistry('${pipelineParams.dockerRegistryReleases}', '73529b15-34f4-4912-9ef6-0829547c9586') {
+						docker.withRegistry("${pipelineParams.dockerRegistryReleases}", "73529b15-34f4-4912-9ef6-0829547c9586") {
 							echo "Pushing Image to CMS Registry"
 							sh "make push-image IMAGE_VERSION=${params.RELEASE_VERSION} INTERNAL_REGISTRY_URL=${pipelineParams.dockerRegistryReleases}"
 						}
@@ -81,9 +81,9 @@ def call(Map pipelineParams) {
 					sh "git add IMAGE_VERSION"
 					sh "git commit -m \"Bump version: ${params.RELEASE_VERSION} → ${params.NEXT_DEV_VERSION}\""
 					sh "git push origin master"
-					echo 'Logging to DEV Docker Registry'
+					echo 'Logging in to DEV Docker Registry'
 					script {
-						docker.withRegistry('${pipelineParams.dockerRegistrySnapshots}', '73529b15-34f4-4912-9ef6-0829547c9586') {
+						docker.withRegistry("${pipelineParams.dockerRegistrySnapshots}", "73529b15-34f4-4912-9ef6-0829547c9586") {
 							echo "Pushing Image to DEV Registry"
 							sh "make push-image IMAGE_VERSION=${params.NEXT_DEV_VERSION} INTERNAL_REGISTRY_URL=${pipelineParams.dockerRegistrySnapshots}"
 							sh "make push-image IMAGE_VERSION=latest INTERNAL_REGISTRY_URL=${pipelineParams.dockerRegistrySnapshots}"
