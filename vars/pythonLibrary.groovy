@@ -1,13 +1,12 @@
 def call(Map pipelineParams) {
 
-// Pipeline Definition for Python Units and Libraries
+// Pipeline Definition for Python Libraries
 
 	pipeline {
 
 		agent {
-			docker {
-			    image pipelineParams.dockerImage
-			    args '-u root:root'
+			dockerfile {
+				args '-u root:root -v /root/.cache/pip:/root/.cache/pip'
 			}
 		}
 
@@ -85,12 +84,6 @@ def call(Map pipelineParams) {
 					sh "make -C . -f /inc/release-me-python/python-release-with-params.mk pre-release upload-to-nexus post-release RELEASE_VERSION=${params.RELEASE_VERSION} NEXT_DEVELOPMENT_VERSION=${params.NEXT_DEV_VERSION}"
 				}
 			}
-		}
+		}	
 	}
-
-/*	post {
-		always {
-			cleanWs()
-		}
-	}*/
 }
