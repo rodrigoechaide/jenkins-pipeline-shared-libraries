@@ -45,7 +45,7 @@ def call(Map pipelineParams) {
 					script {
 						docker.withRegistry("${pipelineParams.dockerRegistrySnapshots}", "73529b15-34f4-4912-9ef6-0829547c9586") {
 							echo "Pushing Image to DEV Registry"
-							sh "make push-image IMAGE_VERSION=${params.NEXT_DEV_VERSION} INTERNAL_REGISTRY_URL=${pipelineParams.dockerRegistrySnapshots}"
+							sh "make push-image IMAGE_VERSION=\$(cat IMAGE_VERSION) INTERNAL_REGISTRY_URL=${pipelineParams.dockerRegistrySnapshots}"
 							sh "make push-image IMAGE_VERSION=latest INTERNAL_REGISTRY_URL=${pipelineParams.dockerRegistrySnapshots}"
 						}
 					}
