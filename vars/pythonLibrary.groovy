@@ -27,15 +27,29 @@ def call(Map pipelineParams) {
 				}
 			}
 
+			stage('Checking out Auxiliar Project') {
+				steps {
+					dir('inc') {
+						dir('release-me-python') {
+							echo "Checking out release-me-python project"
+							git(url: 'git@gitlab.ascentio.com.ar:asc-comp/release-me-python/release-me-python-lin.git', 
+								branch: 'master',
+								credentialsId: '651c7382-f7d9-41a5-93ab-a6e197ee1d77')
+						}
+					}
+					echo 'release-me-python project succesfully checked out!'
+				}
+			}
+
 			stage('Unit-Tests') {
 				steps {
-					sh 'make -C . -f /inc/release-me-python/python-release-with-params.mk clean dist test'
+					sh 'make -C . -f inc/release-me-python/python-release-with-params.mk clean dist test'
 				}
 			}
 
 			stage('Project-Lint') {
 				steps {
-					sh "make -C . -f /inc/release-me-python/python-release-with-params.mk static-analysis MAIN_DIR=${pipelineParams.srcDir} TESTS_DIR=${pipelineParams.testDir}"
+					sh "make -C . -f inc/release-me-python/python-release-with-params.mk static-analysis MAIN_DIR=${pipelineParams.srcDir} TESTS_DIR=${pipelineParams.testDir}"
 				}
 			}
 
@@ -65,7 +79,7 @@ def call(Map pipelineParams) {
 				}
 				steps {
 					echo 'Releasing snapshot version of the library'			
-					sh 'make -C . -f /inc/release-me-python/python-release-with-params.mk upload-to-nexus'
+					sh 'make -C . -f inc/release-me-python/python-release-with-params.mk upload-to-nexus'
 				}
 			}
 
@@ -81,7 +95,7 @@ def call(Map pipelineParams) {
 				}
 				steps {
 					echo 'Releasing new version of the library'
-					sh "make -C . -f /inc/release-me-python/python-release-with-params.mk pre-release upload-to-nexus post-release RELEASE_VERSION=${params.RELEASE_VERSION} NEXT_DEVELOPMENT_VERSION=${params.NEXT_DEV_VERSION}"
+					sh "make -C . -f inc/release-me-python/python-release-with-params.mk pre-release upload-to-nexus post-release RELEASE_VERSION=${params.RELEASE_VERSION} NEXT_DEVELOPMENT_VERSION=${params.NEXT_DEV_VERSION}"
 				}
 			}
 		}	
