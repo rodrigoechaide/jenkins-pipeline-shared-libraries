@@ -6,7 +6,7 @@ def call(Map pipelineParams) {
 
 		agent {
 			dockerfile {
-				args "-u \$(id -u):\$(id -g) -v \$HOME/.cache/pip:/.cache/pip"
+				args '-v /home/administrator/.cache/pip:/.cache/pip'
 			}
 		}
 
