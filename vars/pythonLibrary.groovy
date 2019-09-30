@@ -33,18 +33,11 @@ def call(Map pipelineParams) {
 						dir('release-me-python') {
 							echo "Checking out release-me-python project"
 							git(url: 'git@gitlab.ascentio.com.ar:asc-comp/release-me-python/release-me-python-lin.git', 
-								branch: 'master',
+								branch: 'testing',
 								credentialsId: '651c7382-f7d9-41a5-93ab-a6e197ee1d77')
 						}
 					}
 					echo 'release-me-python project succesfully checked out!'
-				}
-			}
-
-			stage('Virtualenv setup') {
-				steps {
-					echo 'Setting up virtualenv'
-					sh 'virtualenv ci && source ci/bin/activate'
 				}
 			}
 
