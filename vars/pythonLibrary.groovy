@@ -6,7 +6,7 @@ def call(Map pipelineParams) {
 
 		agent {
 			dockerfile {
-				args '-u root:root -v /root/.cache/pip:/root/.cache/pip'
+				args '-v /home/administrator/.cache/pip:/home/administrator/.cache/pip'
 			}
 		}
 
@@ -38,6 +38,13 @@ def call(Map pipelineParams) {
 						}
 					}
 					echo 'release-me-python project succesfully checked out!'
+				}
+			}
+
+			stage('Virtualenv setup') {
+				steps {
+					echo 'Setting up virtualenv'
+					sh 'virtualenv ci && source ci/bin/activate'
 				}
 			}
 
