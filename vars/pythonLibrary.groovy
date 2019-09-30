@@ -29,13 +29,13 @@ def call(Map pipelineParams) {
 
 			stage('Unit-Tests') {
 				steps {
-					sh 'make -C . -f inc/release-me-python/python-release-with-params.mk clean dist test'
+					sh 'make -C . -f /inc/release-me-python/python-release-with-params.mk clean dist test'
 				}
 			}
 
 			stage('Project-Lint') {
 				steps {
-					sh "make -C . -f inc/release-me-python/python-release-with-params.mk static-analysis MAIN_DIR=${pipelineParams.srcDir} TESTS_DIR=${pipelineParams.testDir}"
+					sh "make -C . -f /inc/release-me-python/python-release-with-params.mk static-analysis MAIN_DIR=${pipelineParams.srcDir} TESTS_DIR=${pipelineParams.testDir}"
 				}
 			}
 
@@ -65,7 +65,7 @@ def call(Map pipelineParams) {
 				}
 				steps {
 					echo 'Releasing snapshot version of the library'			
-					sh 'make -C . -f inc/release-me-python/python-release-with-params.mk upload-to-nexus'
+					sh 'make -C . -f /inc/release-me-python/python-release-with-params.mk upload-to-nexus'
 				}
 			}
 
@@ -81,7 +81,7 @@ def call(Map pipelineParams) {
 				}
 				steps {
 					echo 'Releasing new version of the library'
-					sh "make -C . -f inc/release-me-python/python-release-with-params.mk pre-release upload-to-nexus post-release RELEASE_VERSION=${params.RELEASE_VERSION} NEXT_DEVELOPMENT_VERSION=${params.NEXT_DEV_VERSION}"
+					sh "make -C . -f /inc/release-me-python/python-release-with-params.mk pre-release upload-to-nexus post-release RELEASE_VERSION=${params.RELEASE_VERSION} NEXT_DEVELOPMENT_VERSION=${params.NEXT_DEV_VERSION}"
 				}
 			}
 		}	
