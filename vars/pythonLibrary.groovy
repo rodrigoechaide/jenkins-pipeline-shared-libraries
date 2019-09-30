@@ -27,20 +27,6 @@ def call(Map pipelineParams) {
 				}
 			}
 
-			stage('Checking out Auxiliar Project') {
-				steps {
-					dir('inc') {
-						dir('release-me-python') {
-							echo "Checking out release-me-python project"
-							git(url: 'git@gitlab.ascentio.com.ar:asc-comp/release-me-python/release-me-python-lin.git', 
-								branch: 'testing',
-								credentialsId: '651c7382-f7d9-41a5-93ab-a6e197ee1d77')
-						}
-					}
-					echo 'release-me-python project succesfully checked out!'
-				}
-			}
-
 			stage('Unit-Tests') {
 				steps {
 					sh 'make -C . -f inc/release-me-python/python-release-with-params.mk clean dist test'
