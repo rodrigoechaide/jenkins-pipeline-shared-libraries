@@ -64,7 +64,7 @@ def call(Map pipelineParams) {
 					ARTIFACT_REGISTRY_CREDENTIALS = credentials('73529b15-34f4-4912-9ef6-0829547c9586')
 				}
 				steps {
-					echo 'Releasing snapshot version of the library'			
+					echo 'Releasing snapshot version of the library'
 					sh 'make -C . -f /inc/release-me-python/python-release-with-params.mk upload-to-nexus'
 				}
 			}
