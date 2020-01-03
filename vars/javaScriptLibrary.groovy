@@ -104,7 +104,7 @@ def call(Map pipelineParams) {
 					sh 'npm install'
 					sh 'npm test'
 					sh 'grunt release:$RELEASE_VERSION'
-					sh 'npm-cli-login'					
+					sh 'npm-cli-login'
 					sh "npm publish --registry ${pipelineParams.artifactRegistryReleases}" // http://nexus.ascentio.com.ar/nexus/repository/npm-releases/
 					sh 'grunt next-development-version:$NEXT_DEV_VERSION'
 				}
