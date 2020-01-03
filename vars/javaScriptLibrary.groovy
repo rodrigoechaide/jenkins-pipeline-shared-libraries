@@ -56,6 +56,12 @@ def call(Map pipelineParams) {
 				}
 			}
 
+			stage('Security-Scan') {
+				steps {
+					sh 'npm audit'
+				}
+			}
+
 			stage('Regression-Tests') {
 				when {
 					triggeredBy "TimerTrigger"
