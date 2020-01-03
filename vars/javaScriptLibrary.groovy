@@ -52,13 +52,13 @@ def call(Map pipelineParams) {
 
 			stage('Sonar-Analisys') {
 				steps {
-					sh 'npm audit'
+					echo 'Executing code analisys in Sonar'
 				}
 			}
 
 			stage('Security-Scan') {
 				steps {
-					echo 'Executing code analisys in Sonar'
+					sh 'npm audit'
 				}
 			}
 
