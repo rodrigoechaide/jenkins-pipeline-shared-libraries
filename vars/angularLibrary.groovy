@@ -36,7 +36,7 @@ def call(Map pipelineParams) {
 			stage('Unit-Tests') {
 				steps {
 					sh 'export DISPLAY=:99'
-					sh 'ng test --browsers=ChromeHeadlessCI --code-coverage'
+					sh 'ng test --browsers=ChromeHeadlessCI --watch=false --code-coverage'
 				}
 			}
 
