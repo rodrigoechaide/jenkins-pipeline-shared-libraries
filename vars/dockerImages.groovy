@@ -29,6 +29,12 @@ def call(Map pipelineParams) {
 				}
 			}
 
+			stage('Security-Scan') {
+				steps {
+					echo "Making Security Scanning"
+				}
+			}
+
 			stage('Build-Image') {
 				steps {
 					sh "make build-image"
