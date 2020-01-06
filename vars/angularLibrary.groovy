@@ -1,7 +1,5 @@
 def call(Map pipelineParams) {
 
-// Pipeline Definition for Python Libraries
-
 	pipeline {
 
 		agent {
@@ -38,7 +36,7 @@ def call(Map pipelineParams) {
 			stage('Unit-Tests') {
 				steps {
 					sh 'export DISPLAY=:99'
-					sh 'ng test --code-coverage'
+					sh 'ng test --browsers=ChromeHeadlessCI --code-coverage'
 				}
 			}
 
