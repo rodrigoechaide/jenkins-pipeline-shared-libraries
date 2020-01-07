@@ -7,7 +7,7 @@ def call(Map pipelineParams) {
 		agent {
 			dockerfile {
 				args '-v /home/administrator:/home/administrator -e HOME=/home/administrator'
-				filename "${pipelineParams.buildDockerfile}"
+				filename pipelineParams.get('buildDockerfile', 'Dockerfile') // "${pipelineParams.buildDockerfile}"
 			}
 		}
 
