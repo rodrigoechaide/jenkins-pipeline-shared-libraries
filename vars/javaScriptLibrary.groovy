@@ -8,6 +8,7 @@ def call(Map pipelineParams) {
 			dockerfile {
 				// args '-v /home/administrator:/home/administrator -e HOME=/home/administrator'
 				args '-u root:root'
+				filename pipelineParams.get('buildDockerfile', 'Dockerfile')
 			}
 		}
 
