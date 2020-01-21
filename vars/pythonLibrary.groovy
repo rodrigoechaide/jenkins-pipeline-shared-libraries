@@ -1,12 +1,23 @@
 def call(Map pipelineParams) {
 
+
+
+def cache = pipelineParams.get('cache', '')
+
+if(!cache) {
+    cache = '--no-cache'
+}
+else {
+    cache = ''
+}
+
 // Pipeline Definition for Python Libraries
 
 	pipeline {
 
 		agent {
 			dockerfile {
-				args '-v /home/administrator:/home/administrator -e HOME=/home/administrator'
+				additionalBuildArgs "${cache}" // pipelineParams.get('cache', '')
 				filename pipelineParams.get('buildDockerfile', 'Dockerfile') // "${pipelineParams.buildDockerfile}"
 			}
 		}
