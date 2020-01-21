@@ -1,9 +1,19 @@
 def call(Map pipelineParams) {
 
+	def cache = pipelineParams.get('cache', '')
+
+	if(!cache) {
+		cache = '--no-cache'
+	}
+	else {
+		cache = ''
+	}
+
 	pipeline {
 
 		agent {
 			dockerfile {
+				additionalBuildArgs "${cache}"
 				args '-v /home/administrator:/home/administrator -e HOME=/home/administrator'
 				filename pipelineParams.get('buildDockerfile', 'Dockerfile')
 			}
