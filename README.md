@@ -13,7 +13,7 @@ Shared Libraries Repository for Jenkins Pipelines
 Library to use to build python Projects (Units and Libraries). In the following snippet is shown an example of how to call it and all custom parameters availables:
 
 ```
-@Library('asc-shared-libraries@master') _
+@Library('jenkins-shared-libraries@master') _
 
 pythonLibrary(artifactRegistrySnapshots: 'http://nexus.example.com.ar/nexus/repository/pypi-snapshots/',
 	      artifactRegistryReleases: 'http://nexus.example.com.ar/nexus/repository/pypi-releases/',
@@ -28,7 +28,7 @@ pythonLibrary(artifactRegistrySnapshots: 'http://nexus.example.com.ar/nexus/repo
 Library to use to build JavaScript Projects (Units and Libraries). In the following snippet is shown an example of how to call it and all custom parameters availables:
 
 ```
-@Library('asc-shared-libraries@master') _
+@Library('jenkins-shared-libraries@master') _
 
 javaScriptLibrary(artifactRegistrySnapshots: 'http://nexus.example.com.ar/nexus/repository/npm-snapshots/',
 	          artifactRegistryReleases: 'http://nexus.example.com.ar/nexus/repository/npm-releases/',
@@ -41,7 +41,7 @@ javaScriptLibrary(artifactRegistrySnapshots: 'http://nexus.example.com.ar/nexus/
 Library to use to build Angular Projects (Units and Libraries). In the following snippet is shown an example of how to call it and all custom parameters availables:
 
 ```
-@Library('asc-shared-libraries@master') _
+@Library('jenkins-shared-libraries@master') _
 
 angularLibrary(artifactRegistrySnapshots: 'http://nexus.example.com.ar/nexus/repository/npm-snapshots/',
                artifactRegistryReleases: 'http://nexus.example.com.ar/nexus/repository/npm-releases/',
@@ -54,7 +54,7 @@ angularLibrary(artifactRegistrySnapshots: 'http://nexus.example.com.ar/nexus/rep
 Library to use to build, lint and push docker images. In the following snippet is shown an example of how to call it and all custom parameters availables:
 
 ```
-@Library('asc-shared-libraries@master') _
+@Library('jenkins-shared-libraries@master') _
 
 dockerImages(dockerRegistrySnapshots: 'https://nexus.example.com.ar:7443',
 	     dockerRegistryReleases: 'https://registry-cms.example.com.ar')
