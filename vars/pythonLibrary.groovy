@@ -17,9 +17,9 @@ else {
 
 		agent {
 			dockerfile {
-				additionalBuildArgs "${cache}" // pipelineParams.get('cache', '')
+                additionalBuildArgs "${cache}" // pipelineParams.get('cache', '')
                 args '-u root:root'
-				filename pipelineParams.get('buildDockerfile', 'Dockerfile') // "${pipelineParams.buildDockerfile}"
+                filename pipelineParams.get('buildDockerfile', 'Dockerfile') // "${pipelineParams.buildDockerfile}"
 			}
 		}
 
