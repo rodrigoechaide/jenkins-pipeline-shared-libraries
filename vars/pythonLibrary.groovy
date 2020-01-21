@@ -43,7 +43,7 @@ def call(Map pipelineParams) {
 					dir('inc') {
 						dir('release-me-python') {
 							echo "Checking out release-me-python project"
-							git(url: 'https://github.com/ascentio-tech/python-releases-scripts.git', 
+							git(url: 'https://github.com/rodrigoechaide/python-releases-scripts.git', 
 								branch: 'master')
 						}
 					}
