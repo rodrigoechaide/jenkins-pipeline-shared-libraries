@@ -43,9 +43,8 @@ def call(Map pipelineParams) {
 					dir('inc') {
 						dir('release-me-python') {
 							echo "Checking out release-me-python project"
-							git(url: 'git@gitlab.ascentio.com.ar:asc-comp/release-me-python/release-me-python.git', 
-								branch: 'master',
-								credentialsId: '651c7382-f7d9-41a5-93ab-a6e197ee1d77')
+							git(url: 'https://github.com/ascentio-tech/python-releases-scripts.git', 
+								branch: 'master')
 						}
 					}
 					echo 'release-me-python project succesfully checked out!'
