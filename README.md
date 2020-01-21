@@ -1,12 +1,17 @@
 # jenkins-pipeline-shared-libraries
 
-Shared Libraries Repository for Jenkins Pipelines
+Shared Libraries Repository for Jenkins Pipelines.
+
+## How to Configure
+
+* Fork the repo and then configure it inside Jenkins System Configuration in the section Global Pipeline Libraries.
+* Modify credentials id inside each library in order to have access to configured registries to upload artifacts.
 
 ## Framework Testing for pipelines and shared libraries
 
 * https://github.com/jenkinsci/JenkinsPipelineUnit
 
-## Libraries Available
+## Available Libraries
 
 ### pythonLibrary
 
