@@ -15,26 +15,29 @@ def call(Map pipelineParams) {
 		} */
 
 		stages {
-
 			stage('System-Tests') {
 				steps {
-					echo "Executing Smoke System Tests. Most important system tests"	
+					echo "Executing Smoke System Tests. Most important system tests"
 				}
 			}
-
 			stage('Regression-Tests') {
 				//when {
 				//	expression { regresionTests == 'True' }
 				//}
 				steps {
-					echo "Executing Full Regresion Tests. Triggers this stage with a cron so it only runs at nights"
+					echo "Executing Full Regresion Tests. Triggers this stage with a cron so it only runs at night"
 				}
 			}
-
 			stage('Deploy') {
 				steps {
 					echo "Deploying Application. Invoke here the deploy repository"
+				}
 			}
-		}	
+		}
+		post {
+			always {
+				cleanWs()
+			}
+		}
 	}
-}
+}	
