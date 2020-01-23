@@ -2,7 +2,7 @@ def call(Map pipelineParams) {
 
 	def cache = pipelineParams.get('cache', '')
 
-	if(!cache) {
+	if (cache == false) {
 		cache = '--no-cache'
 	}
 	else {
@@ -130,6 +130,15 @@ def call(Map pipelineParams) {
 			always {
 				cleanWs()
 			}
+			success {
+				script {
+					if (pipelineParams.downstreamJob) {
+						build job: pipelineParams.downstreamJob, 
+						parameters: [ string(name: 'upsteam_project_name', value: 'test') ], 
+						wait: false
+					}
+				}
+			}			
 		}
 	}
 }
