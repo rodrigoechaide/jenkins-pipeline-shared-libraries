@@ -9,7 +9,7 @@ def call(Map pipelineParams) {
 		cache = ''
 	}
 
-// Pipeline Definition for Python Libraries
+// Pipeline Definition for Python Libraries and Units
 
 	pipeline {
 
