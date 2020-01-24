@@ -99,7 +99,18 @@ def call(Map pipelineParams) {
 		}
 		post {
 			always {
+				sh "chmod -R 777 ." // https://issues.jenkins-ci.org/browse/JENKINS-24440
+				// sh 'find . -user root -name \'*\' | xargs chmod ugo+rw'
 				cleanWs()
+			}
+			success {
+				script {
+					if (pipelineParams.downstreamJob) {
+						build job: pipelineParams.downstreamJob, 
+						parameters: [ string(name: 'downstreamParam', value: env.gitlabActionType) ], 
+						wait: false
+					}
+				}
 			}
 		}
 	}
