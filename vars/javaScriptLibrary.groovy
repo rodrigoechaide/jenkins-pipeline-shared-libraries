@@ -9,7 +9,7 @@ def call(Map pipelineParams) {
 		cache = ''
 	}
 
-// Pipeline Definition for Python Libraries
+// Pipeline Definition for JavaScript Libraries and Units
 
 	pipeline {
 
@@ -128,17 +128,19 @@ def call(Map pipelineParams) {
 		}
 		post {
 			always {
+				sh "chmod -R 777 ." // https://issues.jenkins-ci.org/browse/JENKINS-24440
+				// sh 'find . -user root -name \'*\' | xargs chmod ugo+rw'
 				cleanWs()
 			}
 			success {
 				script {
 					if (pipelineParams.downstreamJob) {
 						build job: pipelineParams.downstreamJob, 
-						parameters: [ string(name: 'upsteam_project_name', value: 'test') ], 
+						parameters: [ string(name: 'downstreamParam', value: env.gitlabActionType) ], 
 						wait: false
 					}
 				}
-			}			
+			}
 		}
 	}
 }
