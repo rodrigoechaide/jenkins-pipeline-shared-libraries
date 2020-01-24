@@ -14,7 +14,7 @@ def call(Map pipelineParams) {
 		agent {
 			dockerfile {
 				additionalBuildArgs "${cache}"
-				args '-v /home/administrator:/home/administrator -e HOME=/home/administrator'
+				args '-u root:root'
 				filename pipelineParams.get('buildDockerfile', 'Dockerfile')
 			}
 		}
@@ -111,13 +111,15 @@ def call(Map pipelineParams) {
 		}
 		post {
 			always {
+				sh "chmod -R 777 ." // https://issues.jenkins-ci.org/browse/JENKINS-24440
+				// sh 'find . -user root -name \'*\' | xargs chmod ugo+rw'
 				cleanWs()
 			}
 			success {
 				script {
 					if (pipelineParams.downstreamJob) {
 						build job: pipelineParams.downstreamJob, 
-						parameters: [ string(name: 'upsteam_project_name', value: 'test') ], 
+						parameters: [ string(name: 'downstreamParam', value: env.gitlabActionType) ], 
 						wait: false
 					}
 				}
